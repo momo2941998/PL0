@@ -74,7 +74,9 @@ TokenType getToken()
       length++;
       Id[length] = '\0';
     }
-    return IDENT;
+    unsigned int check = checkKeyword(Id);
+    if ( check == NONE) return IDENT;
+    else return check;
   }
 
   if (isdigit(ch))
