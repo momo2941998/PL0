@@ -4,7 +4,7 @@
 #include <string.h>
 
 TokenType Token;
-int Num; // từ vụng nhận được khi token là NUMMBER
+int Num;                    // từ vụng nhận được khi token là NUMMBER
 char Id[MAX_IDENT_LEN + 1]; // từ vựng nhận được khi token là IDENT
 
 FILE *f;
@@ -30,7 +30,7 @@ TokenType checkKeyword(char *str)
 void readNext()
 {
   ch = getCh();
-  // printf("\n read: %d",(unsigned int) ch);
+  //printf("\n read: %c",(unsigned int) ch);
 }
 
 char getCh()
@@ -51,20 +51,26 @@ TokenType getToken()
     int length = 0;
     Id[length] = ch;
     readNext();
-    while (isalpha(ch) || isdigit(ch)){
+    while (isalpha(ch) || isdigit(ch))
+    {
       length++;
-			if(length > MAX_IDENT_LEN) {
-				readNext();
-			} else {
-				Id[length] = ch;
-				readNext();
-			}
+      if (length > MAX_IDENT_LEN)
+      {
+        readNext();
+      }
+      else
+      {
+        Id[length] = ch;
+        readNext();
+      }
     }
-    if (length > MAX_IDENT_LEN) {
+    if (length > MAX_IDENT_LEN)
+    {
       length++;
       Id[MAX_IDENT_LEN] = '\0';
     }
-    else {
+    else
+    {
       length++;
       Id[length] = '\0';
     }
@@ -76,13 +82,16 @@ TokenType getToken()
     int length = 1;
     Num = ch - '0';
     readNext();
-    while (isdigit(ch)){
+    while (isdigit(ch))
+    {
       int tmp = Num * 10 + (ch - '0');
-      if (1) {
+      if (1)
+      {
         length++;
         Num = tmp;
       }
-      if (length > MAX_NUMBER_LEN) return NONE;
+      if (length > MAX_NUMBER_LEN)
+        return NONE;
       readNext();
     }
     return NUMBER;
@@ -131,24 +140,42 @@ TokenType getToken()
       readNext();
       return LEQ;
     }
-    else return LSS;
+    else
+      return LSS;
   }
 
   if (ch == '>')
   {
     readNext();
-     if (ch == '=')
+    if (ch == '=')
     { // GEQ: >=
       readNext();
       return GEQ;
     }
-    else return GTR; // >
+    else
+      return GTR; // >
   }
 
   if (ch == '(')
-  { // LPARENT
+  { 
     readNext();
-    return LPARENT;
+    if (ch != '*') // LPARENT
+      return LPARENT;
+    // ch == '*'
+    int isMacthComment = 0;
+    while (!isMacthComment)
+    {
+      readNext();
+      while (ch != '*')
+        readNext();
+      readNext();
+      if (ch == ')')
+      {
+        isMacthComment = 1;
+        readNext();
+        return getToken();
+      }
+    }
   }
 
   if (ch == ')')

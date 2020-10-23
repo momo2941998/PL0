@@ -10,5 +10,5 @@ Procedure gcd(a; b; var d);
 Begin  
    Call Readln(a);	Call Readln(b);
 	Call gcd(a,b,c);
-	Call Writeln(c);
+	Call Writeln(c); *)
 End. 
