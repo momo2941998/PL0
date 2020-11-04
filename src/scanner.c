@@ -29,8 +29,9 @@ TokenType checkKeyword(char *str)
 
 void readNext()
 {
+
   ch = getCh();
-  //printf("\n read: %c",(unsigned int) ch);
+  // printf("\n read: %d",(unsigned int) ch);
 }
 
 char getCh()
@@ -43,6 +44,7 @@ TokenType getToken()
   //TODO: đọc đầu vào, trả về token
 
   //Ch chua ky tu doc duoc tu van ban nguon boi ham getCh()
+
   while (ch == ' ' || ch == '\n' || ch == '\t')
     readNext();
 
@@ -168,9 +170,10 @@ TokenType getToken()
     while (!isMacthComment)
     {
       readNext();
-      while (ch != '*')
+      while (ch != '*' && ch != EOF)
         readNext();
-      readNext();
+      if (ch != EOF) readNext();
+      else return NONE;
       if (ch == ')')
       {
         isMacthComment = 1;
